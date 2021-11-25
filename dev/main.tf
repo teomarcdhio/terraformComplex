@@ -35,3 +35,23 @@ module "network" {
     resource_gp_location = azurerm_resource_group.rg.location
     resource_gp_name = azurerm_resource_group.rg.name
 }
+
+## Create the webserver usign module; passing the values for subscription_id, tenant_id, rg.location and rg.name as variabels to the module 
+module "webserver" {
+    source = "../modules/webserver"
+    subscription_id = var.subscription_id
+    tenant_id       = var.tenant_id
+    resource_gp_location = azurerm_resource_group.rg.location
+    resource_gp_name = azurerm_resource_group.rg.name
+    domain_name_prefix = var.domain_name_prefix
+    subnet_backend_id = module.network.subnet_backend_id
+    subnet_backend = module.network.subnet_backend
+    location = var.location
+    winvmuser = var.winvmuser
+    winvmpass = var.winvmpass
+    az_domain = var.az_domain
+    az_domain_dc_1 = var.az_domain_dc_1
+    az_domain_password = var.az_domain_password
+    az_domain_username = var.az_domain_username
+
+}
