@@ -5,3 +5,11 @@ variable "tenant_id" {
 variable "subscription_id" {
   type = string
 }
+
+variable "resource_gp_location" {
+  type = string
+}
+
+variable "resource_gp_name" {
+  type = string
+}
