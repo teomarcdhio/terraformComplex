@@ -26,9 +26,9 @@ variable "subnet_backend_id" {
   type = string
 }
 
-variable "subnet_backend" {
-  type = list(string)
-}
+#variable "subnet_backend" {
+# type = string
+#}
 
 variable "winvmuser" {
   type = string

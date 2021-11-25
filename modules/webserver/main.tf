@@ -22,11 +22,6 @@ resource "azurerm_network_interface" "webNI" {
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.webserverIps[count.index].id
   }
-
-  ## Ensure the subnet is created first before creating these vNics.
-  depends_on = [
-    var.subnet_backend
-  ]
 }
 
 ## Create the Windows VMs and link the vNIcs created earlier
@@ -69,12 +64,12 @@ resource "azurerm_managed_disk" "data" {
   disk_size_gb         = 128
 }
 
-resource "azurerm_virtual_machine_data_disk_attachment" "data" {
-  managed_disk_id    = azurerm_managed_disk.data.*.id
-  virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs.*.id
-  lun                = "10"
-  caching            = "ReadWrite"
-}
+#resource "azurerm_virtual_machine_data_disk_attachment" "data" {
+#  managed_disk_id    = azurerm_managed_disk.data.id
+#  virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs.id
+#  lun                = "10"
+#  caching            = "ReadWrite"
+#}
 
 ## Join Windows VM to domain
 resource "azurerm_virtual_machine_extension" "webjoin" {

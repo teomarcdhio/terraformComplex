@@ -39,13 +39,15 @@ module "network" {
 ## Create the webserver usign module; passing the values for subscription_id, tenant_id, rg.location and rg.name as variabels to the module 
 module "webserver" {
     source = "../modules/webserver"
+    ## Ensure the subnet is created first before creating these vNics.
+    depends_on = [module.network]
     subscription_id = var.subscription_id
     tenant_id       = var.tenant_id
     resource_gp_location = azurerm_resource_group.rg.location
     resource_gp_name = azurerm_resource_group.rg.name
     domain_name_prefix = var.domain_name_prefix
     subnet_backend_id = module.network.subnet_backend_id
-    subnet_backend = module.network.subnet_backend
+    #subnet_backend = module.network.subnet_backend
     location = var.location
     winvmuser = var.winvmuser
     winvmpass = var.winvmpass
