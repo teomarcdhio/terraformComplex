@@ -27,20 +27,22 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-## Create network usign module; passing the values for subscription_id, tenant_id, rg.location and rg.name as variabels to the module 
+## Create network usign module.
 module "network" {
     source = "../modules/network"
+    ## Passign variables across modules
     subscription_id = var.subscription_id
     tenant_id       = var.tenant_id
     resource_gp_location = azurerm_resource_group.rg.location
     resource_gp_name = azurerm_resource_group.rg.name
 }
 
-## Create the webserver usign module; passing the values for subscription_id, tenant_id, rg.location, rg.name, etc as variabels to the module 
+## Create the webserver usign module
 module "webserver" {
     source = "../modules/webserver"
     ## Ensure the subnet is created first before creating these vNics.
     depends_on = [module.network]
+    ## Passign variables across modules
     subscription_id = var.subscription_id
     tenant_id       = var.tenant_id
     resource_gp_location = azurerm_resource_group.rg.location
@@ -57,11 +59,12 @@ module "webserver" {
 
 }
 
-## Create the appGateway usign module; passing the values for subscription_id, tenant_id, rg.location and rg.name as variabels to the module 
+## Create the appGateway usign module.
 module "appgateway" {
     source = "../modules/appgateway"
     ## Ensure the subnet is created first before creating these vNics.
     depends_on = [module.network]
+    ## Passign variables across modules
     subscription_id = var.subscription_id
     tenant_id       = var.tenant_id
     resource_gp_location = azurerm_resource_group.rg.location
