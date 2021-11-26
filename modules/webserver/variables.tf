@@ -34,3 +34,6 @@ variable "winvmpass" {
   type = string
 }
  
+variable "webservercount" {
+  type = number
+}

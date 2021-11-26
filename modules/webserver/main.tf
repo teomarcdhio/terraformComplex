@@ -1,6 +1,6 @@
 ## You'll need public IPs for each VM for Ansible to connect to and to deploy the web app to.
 resource "azurerm_public_ip" "webserverIps" {
-  count               = 3
+  count               = var.webservercount
   name                = "publicWebserverIp-${count.index}"
   location            = var.resource_gp_location
   resource_group_name = var.resource_gp_name
@@ -10,7 +10,7 @@ resource "azurerm_public_ip" "webserverIps" {
 
 ## Create a vNic for each VM. 
 resource "azurerm_network_interface" "webNI" {
-  count               = 3
+  count               = var.webservercount
   name                = "webserver-nic-${count.index}"
   location            = var.resource_gp_location
   resource_group_name = var.resource_gp_name
@@ -26,7 +26,7 @@ resource "azurerm_network_interface" "webNI" {
 
 ## Create the Windows VMs and link the vNIcs created earlier
 resource "azurerm_windows_virtual_machine" "webserverVMs" {
-  count                    = 3
+  count                    = var.webservercount
   name                     = "webservervm-${count.index}"
   location                 = var.location
   resource_group_name      = var.resource_gp_name
@@ -55,7 +55,7 @@ resource "azurerm_windows_virtual_machine" "webserverVMs" {
   ]
 }
 resource "azurerm_managed_disk" "data" {
-  count                = 3
+  count                = var.webservercount
   name                 = "webservervm-data-${count.index}"
   location             = var.resource_gp_location
   resource_group_name  = var.resource_gp_name
@@ -65,7 +65,7 @@ resource "azurerm_managed_disk" "data" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "data" {
-  count              = 3
+  count              = var.webservercount
   managed_disk_id    = azurerm_managed_disk.data[count.index].id
   virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs[count.index].id
   lun                = "10"
@@ -101,7 +101,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data" {
 ## Download and run the powershell script to allow Ansible via WinRM. 
 ## exit code has to be 0
 resource "azurerm_virtual_machine_extension" "webrm" {
-  count                      = 3
+  count                      = var.webservercount
   name                       = "webrm"
   virtual_machine_id         = azurerm_windows_virtual_machine.webserverVMs[count.index].id
   publisher                  = "Microsoft.Compute"     ## az vm extension image list --location eastus Do not use Microsoft.Azure.Extensions here

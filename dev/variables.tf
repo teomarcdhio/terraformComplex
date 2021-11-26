@@ -8,10 +8,12 @@ variable "subscription_id" {
 
 variable "resource_group" {
   type = string
+  default = "dev"
 }
 
 variable "location" {
   type = string
+  default = "uksouth"
 }
 
 variable "domain_name_prefix" {
@@ -20,6 +22,7 @@ variable "domain_name_prefix" {
 
 variable "winvmuser" {
   type = string
+  default = "devadmin"
 }
 
 variable "winvmpass" {
@@ -48,4 +51,15 @@ variable "management_ip" {
 
 variable "linuxuser" {
   type = string
+  default = "devadmin"
+}
+
+variable "webservercount" {
+  type = number
+  default = 1
+}
+
+variable "enviornment" {
+  type = string
+  default = "dev"
 }

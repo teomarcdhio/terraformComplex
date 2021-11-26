@@ -20,7 +20,7 @@ provider "azurerm" {
 
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
-  name                = "myTFVnet"
+  name                = "${var.enviornment}-Vnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.resource_gp_location
   resource_group_name = var.resource_gp_name
@@ -116,3 +116,7 @@ resource "azurerm_network_security_rule" "allowSSH" {
   network_security_group_name = azurerm_network_security_group.nsg1.name
 }
 
+resource "azurerm_subnet_network_security_group_association" "nsg1" {
+  subnet_id                 = azurerm_subnet.backend.id
+  network_security_group_id = azurerm_network_security_group.nsg1.id
+}

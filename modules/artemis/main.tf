@@ -24,7 +24,7 @@ resource "azurerm_network_interface" "linuxNI" {
   }
 }
 
-# Create (and display) an SSH key
+# Create an SSH key
 resource "tls_private_key" "test_ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096

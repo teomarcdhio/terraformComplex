@@ -16,6 +16,7 @@ variable "resource_gp_name" {
 
 variable "location" {
   type = string
+  default = "uksouth"
 }
 
 variable "domain_name_prefix" {

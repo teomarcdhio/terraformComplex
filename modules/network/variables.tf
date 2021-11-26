@@ -17,3 +17,7 @@ variable "resource_gp_name" {
 variable "management_ip" {
   type = string
 }
+
+variable "enviornment" {
+  type = string
+}

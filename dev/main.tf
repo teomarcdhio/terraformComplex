@@ -36,6 +36,7 @@ module "network" {
     resource_gp_location = azurerm_resource_group.rg.location
     resource_gp_name = azurerm_resource_group.rg.name
     management_ip = var.management_ip
+    enviornment =var.enviornment
 }
 
 ## Create the webserver using module
@@ -53,6 +54,7 @@ module "webserver" {
     location = var.location
     winvmuser = var.winvmuser
     winvmpass = var.winvmpass
+    webservercount = var.webservercount
 #    az_domain = var.az_domain
 #    az_domain_dc_1 = var.az_domain_dc_1
 #    az_domain_password = var.az_domain_password
@@ -102,8 +104,10 @@ output "tls_private_key" {
 
 output "artemisIps" {
   value = module.artemis.artemisIps
+  depends_on = [module.artemis]
 }
 
 output "webserverIps" {
   value      = module.webserver.webserverIps
+  depends_on = [module.webserver]
 }
