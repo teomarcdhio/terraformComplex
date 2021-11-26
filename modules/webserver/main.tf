@@ -66,8 +66,8 @@ resource "azurerm_managed_disk" "data" {
 
 resource "azurerm_virtual_machine_data_disk_attachment" "data" {
   count              = 3
-  managed_disk_id    = azurerm_managed_disk.data.id
-  virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs.id
+  managed_disk_id    = azurerm_managed_disk.data[count.index].id
+  virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs[count.index].id
   lun                = "10"
   caching            = "ReadWrite"
 }

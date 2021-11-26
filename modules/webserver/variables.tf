@@ -26,10 +26,6 @@ variable "subnet_backend_id" {
   type = string
 }
 
-#variable "subnet_backend" {
-# type = string
-#}
-
 variable "winvmuser" {
   type = string
 }
@@ -38,18 +34,3 @@ variable "winvmpass" {
   type = string
 }
  
-variable "az_domain" {
-  type = string
-}
-
-variable "az_domain_username" {
-  type = string
-}
-
-variable "az_domain_dc_1" {
-  type = string
-}
-
-variable "az_domain_password" {
-  type = string
-}
