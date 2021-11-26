@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
-## Create network usign module.
+## Create network using module.
 module "network" {
     source = "../modules/network"
     ## Passign variables across modules
@@ -37,7 +37,7 @@ module "network" {
     resource_gp_name = azurerm_resource_group.rg.name
 }
 
-## Create the webserver usign module
+## Create the webserver using module
 module "webserver" {
     source = "../modules/webserver"
     ## Ensure the subnet is created first before creating these vNics.
@@ -59,9 +59,26 @@ module "webserver" {
 
 }
 
-## Create the appGateway usign module.
+## Create the appGateway using module.
 module "appgateway" {
     source = "../modules/appgateway"
+    ## Ensure the subnet is created first before creating these vNics.
+    depends_on = [module.network]
+    ## Passign variables across modules
+    subscription_id = var.subscription_id
+    tenant_id       = var.tenant_id
+    resource_gp_location = azurerm_resource_group.rg.location
+    resource_gp_name = azurerm_resource_group.rg.name
+    domain_name_prefix = var.domain_name_prefix
+    subnet_backend_id = module.network.subnet_backend_id
+    location = var.location
+    virtual_network_name = module.network.virtual_network_name
+    subnet_frontend_id = module.network.subnet_frontend_id
+}
+
+## Create the artemis server using module.
+module "artemis" {
+    source = "../modules/artemis"
     ## Ensure the subnet is created first before creating these vNics.
     depends_on = [module.network]
     ## Passign variables across modules
