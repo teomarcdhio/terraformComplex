@@ -64,38 +64,39 @@ resource "azurerm_managed_disk" "data" {
   disk_size_gb         = 128
 }
 
-#resource "azurerm_virtual_machine_data_disk_attachment" "data" {
-#  managed_disk_id    = azurerm_managed_disk.data.id
-#  virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs.id
-#  lun                = "10"
-#  caching            = "ReadWrite"
-#}
+resource "azurerm_virtual_machine_data_disk_attachment" "data" {
+  count              = 3
+  managed_disk_id    = azurerm_managed_disk.data.id
+  virtual_machine_id = azurerm_windows_virtual_machine.webserverVMs.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
 
 ## Join Windows VM to domain
-resource "azurerm_virtual_machine_extension" "webjoin" {
-  count                = 3
-  name                 = "webjoin"
-  virtual_machine_id   = azurerm_windows_virtual_machine.webserverVMs[count.index].id
-  publisher            = "Microsoft.Compute"
-  type                 = "JsonADDomainExtension"
-  type_handler_version = "1.3"
-  # What the settings mean: https://docs.microsoft.com/en-us/windows/desktop/api/lmjoin/nf-lmjoin-netjoindomain
-  settings           = <<SETTINGS
-  {
-    "Name": "${var.az_domain}",
-    "OUPath": "OU=Servers,DC=${var.az_domain_dc_1},DC=com",
-    "User": "${var.az_domain}\\pr_${var.az_domain_username}",
-    "Restart": "true",
-    "Options": "3"
-  }
-  SETTINGS
-  protected_settings = <<PROTECTED_SETTINGS
-  {
-    "Password": "${var.az_domain_password}"
-  }
-  PROTECTED_SETTINGS
-  depends_on         = [azurerm_windows_virtual_machine.webserverVMs]
-}
+# resource "azurerm_virtual_machine_extension" "webjoin" {
+#   count                = 3
+#   name                 = "webjoin"
+#   virtual_machine_id   = azurerm_windows_virtual_machine.webserverVMs[count.index].id
+#   publisher            = "Microsoft.Compute"
+#   type                 = "JsonADDomainExtension"
+#   type_handler_version = "1.3"
+#   # What the settings mean: https://docs.microsoft.com/en-us/windows/desktop/api/lmjoin/nf-lmjoin-netjoindomain
+#   settings           = <<SETTINGS
+#   {
+#     "Name": "${var.az_domain}",
+#     "OUPath": "OU=Servers,DC=${var.az_domain_dc_1},DC=com",
+#     "User": "${var.az_domain}\\pr_${var.az_domain_username}",
+#     "Restart": "true",
+#     "Options": "3"
+#   }
+#   SETTINGS
+#   protected_settings = <<PROTECTED_SETTINGS
+#   {
+#     "Password": "${var.az_domain_password}"
+#   }
+#   PROTECTED_SETTINGS
+#   depends_on         = [azurerm_windows_virtual_machine.webserverVMs]
+# }
 
 ## Download and run the powershell script to allow Ansible via WinRM. 
 ## exit code has to be 0
@@ -115,7 +116,3 @@ resource "azurerm_virtual_machine_extension" "webrm" {
 SETTINGS
 }
 
-output "webserverIps" {
-  value      = azurerm_public_ip.webserverIps.*.ip_address
-  depends_on = [azurerm_windows_virtual_machine.webserverVMs]
-}
