@@ -6,4 +6,5 @@ output "tls_private_key" {
 
 output "artemisIps" {
   value = azurerm_public_ip.artemisIps.*.ip_address
+  depends_on  = [azurerm_linux_virtual_machine.artemisVMs]
 }

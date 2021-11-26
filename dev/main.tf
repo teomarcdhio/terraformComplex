@@ -94,3 +94,16 @@ module "artemis" {
     subnet_frontend_id = module.network.subnet_frontend_id
     linuxuser = var.linuxuser
 }
+
+output "tls_private_key" {
+  value     = module.artemis.tls_private_key
+  sensitive = true
+}
+
+output "artemisIps" {
+  value = module.artemis.artemisIps
+}
+
+output "webserverIps" {
+  value      = module.webserver.webserverIps
+}
