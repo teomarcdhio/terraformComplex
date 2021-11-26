@@ -35,6 +35,7 @@ module "network" {
     tenant_id       = var.tenant_id
     resource_gp_location = azurerm_resource_group.rg.location
     resource_gp_name = azurerm_resource_group.rg.name
+    management_ip = var.management_ip
 }
 
 ## Create the webserver using module
@@ -91,4 +92,5 @@ module "artemis" {
     location = var.location
     virtual_network_name = module.network.virtual_network_name
     subnet_frontend_id = module.network.subnet_frontend_id
+    linuxuser = var.linuxuser
 }

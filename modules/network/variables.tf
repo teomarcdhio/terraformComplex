@@ -13,3 +13,7 @@ variable "resource_gp_location" {
 variable "resource_gp_name" {
   type = string
 }
+
+variable "management_ip" {
+  type = string
+}

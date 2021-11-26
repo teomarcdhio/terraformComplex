@@ -25,3 +25,15 @@ variable "domain_name_prefix" {
 variable "subnet_backend_id" {
   type = string
 }
+
+variable "virtual_network_name" {
+  type = string
+}
+
+variable "subnet_frontend_id" {
+  type = string
+}
+
+variable "linuxuser" {
+  type = string
+}

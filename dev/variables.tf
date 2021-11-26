@@ -42,3 +42,10 @@ variable "az_domain_password" {
   type = string
 }
 
+variable "management_ip" {
+  type = string
+}
+
+variable "linuxuser" {
+  type = string
+}
